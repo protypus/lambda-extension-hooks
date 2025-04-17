@@ -18,6 +18,7 @@
       "LICENSE"
     ],
     "keywords": [
+      "lambda-extension-hooks",
       "aws",
       "aws-lambda-extension",
       "lambda",
@@ -40,10 +41,10 @@
     },
     "repository": {
       "type": "git",
-      "url": "https://github.com/protypus/aws-lambda-hooks.git"
+      "url": "https://github.com/protypus/lambda-extension-hooks.git"
     },
     "bugs": {
-      "url": "https://github.com/protypus/aws-lambda-hooks/issues"
+      "url": "https://github.com/protypus/lambda-extension-hooks/issues"
     },
-    "homepage": "https://github.com/protypus/aws-lambda-hooks#readme"
+    "homepage": "https://github.com/protypus/lambda-extension-hooks#readme"
   }
