@@ -1,0 +1,49 @@
+{
+    "name": "lambda-extension-hooks",
+    "version": "0.1.0",
+    "description": "Plug-and-play hook system for building AWS Lambda Extensions and injecting custom logic at each lifecycle stage of an AWS Lambda function.",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"No tests yet\"",
+      "build": "node index.js"
+    },
+    "exports": {
+      ".": "./index.js"
+    },
+    "files": [
+      "index.js",
+      "lib/*.js",
+      "README.md",
+      "LICENSE"
+    ],
+    "keywords": [
+      "aws",
+      "aws-lambda-extension",
+      "lambda",
+      "lambda-extension",
+      "lambda-extensions-api",
+      "lambda-hooks",
+      "lambda-lifecycle-hooks",
+      "lambda-layer",
+      "internal-extension",
+      "external-extension",
+      "invoke",
+      "shutdown",
+      "nodejs",
+      "esm"
+    ],
+    "author": "Avraham Shemesh",
+    "license": "MIT",
+    "engines": {
+      "node": ">=18"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/protypus/aws-lambda-hooks.git"
+    },
+    "bugs": {
+      "url": "https://github.com/protypus/aws-lambda-hooks/issues"
+    },
+    "homepage": "https://github.com/protypus/aws-lambda-hooks#readme"
+  }
