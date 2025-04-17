@@ -1,6 +1,6 @@
 # lambda-extension-hooks
 
-> "Easily create AWS Lambda Extensions with a simple hook-based API"
+> __Easily create AWS Lambda Extensions with a simple hook-based API"
 
 **lambda-extension-hooks** is a modern ESM-based Node.js module that makes it simple to create AWS Lambda Extensions. It handles all the low-level communication with the Lambda Extensions API, letting you focus on your business logic instead of the infrastructure details.
 
