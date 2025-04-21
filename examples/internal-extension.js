@@ -13,13 +13,13 @@ import { LambdaHooks } from 'lambda-extension-hooks';
 
   const hooks = new LambdaHooks({
     extensionName: 'metrics-collector-extension',
-    extensionType: 'internal'
+    extensionType: 'internal',
+    initLoad: 'before'
   });
 
   // Setup initialization hook
   hooks.onInit(async (event) => {
     console.log(`Metrics extension initialized for ${event.functionName}`);
-    
     // Capture function configuration for context
     metrics.functionName = event.functionName;
     metrics.functionVersion = event.functionVersion;
@@ -44,9 +44,9 @@ import { LambdaHooks } from 'lambda-extension-hooks';
     // Object with handler and specific priority
     {
       handler: async (event) => {
+        console.log(`Function 2 invoked with request ID: ${event.requestId}`);
         const invocationStart = Date.now();
-        
-        // Record invocation
+
         metrics.invocations++;
         
         // Track request IDs to correlate with function logs
