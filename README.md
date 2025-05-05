@@ -4,19 +4,19 @@
 
 **lambda-extension-hooks** is a modern ESM-based Node.js module that makes it simple to create AWS Lambda Extensions. It handles all the low-level communication with the Lambda Extensions API, letting you focus on your business logic instead of the infrastructure details.
 
-## ✨ Features
+## Features
 
-- 🔄 Simple hook-based API for Lambda lifecycle events (init, invoke, shutdown)  
-- 🧩 Modern ESM module with a clean, expressive API  
-- 🛡️ Robust error handling with detailed error reporting  
-- ⚡ Support for concurrent async event handlers with configurable timeouts  
-- 📦 Designed for use as a Lambda Layer  
-- 📝 Comprehensive documentation  
+- 🔄 Simple hook-based API for Lambda lifecycle events (INIT, INVOKE, SHUTDOWN)
+- 🧩 Modern ESM module with a clean, expressive API
+- 🛡️ Robust error handling with detailed error reporting
+- ⚡ Support for concurrent async event handlers with configurable priorities
+- 📦 Designed for use as a Lambda Layer
+- 📝 Comprehensive documentation
 
 ## 📋 Table of Contents
 
 - [lambda-extension-hooks](#lambda-extension-hooks)
-  - [✨ Features](#-features)
+  - [Features](#-features)
   - [📋 Table of Contents](#-table-of-contents)
   - [🚀 Installation](#-installation)
   - [🏁 Quick Start](#-quick-start)
@@ -32,10 +32,10 @@
       - [Init Event](#init-event)
       - [Invoke Event](#invoke-event)
       - [Shutdown Event](#shutdown-event)
-  - [📦 Lambda Layer Setup](#-lambda-layer-setup)
-  - [🐛 Error Handling](#-error-handling)
+  - [Lambda Layer Setup](#-lambda-layer-setup)
+  - [Error Handling](#-error-handling)
     - [Error Handling Best Practices](#error-handling-best-practices)
-  - [⚡ Performance Considerations](#-performance-considerations)
+  - [Performance Considerations](#-performance-considerations)
   - [❓ FAQ](#-faq)
   - [🤝 Contributing](#-contributing)
   - [📄 License](#-license)
@@ -203,7 +203,7 @@ await hooks.start();
 }
 ```
 
-## 📦 Lambda Layer Setup
+## Lambda Layer Setup
 
 To use this module as a Lambda Layer:
 
@@ -268,7 +268,7 @@ aws lambda update-function-configuration \
   --layers arn:aws:lambda:region:account-id:layer:my-extension-layer:1
 ```
 
-## 🐛 Error Handling
+## Error Handling
 
 The module provides robust error handling through the `LambdaHookError` class:
 
@@ -296,7 +296,7 @@ hooks.onInvoke(async (event) => {
 - Include the original error to preserve the stack trace  
 - Log errors with relevant context information  
 
-## ⚡ Performance Considerations
+## Performance Considerations
 
 - **Minimize cold start impact**: Keep initialization light  
 - **Be resource-conscious**: Extensions share CPU/memory  
@@ -311,13 +311,13 @@ hooks.onInvoke(async (event) => {
 A: With proper care, impact can be minimal. Use timeouts, optimize, and test well.
 
 **Q: Can I use this with any Lambda runtime?**  
-A: Yes. The extension runs separately and is runtime-agnostic.
+A: It depends. External extensions work with any Lambda runtime since they run as separate processes. Just ensure the binary is compatible with the Lambda OS (e.g. Amazon Linux 2). Internal extensions, however, must be written in the same language as the function’s runtime.
 
 **Q: How do I debug my extension?**  
 A: Use `console.log` — logs are sent to CloudWatch alongside function logs.
 
 **Q: What's the difference between external and internal extensions?**  
-A: External extensions run in a separate process. Internal ones share the runtime. This module supports external extensions.
+A: External extensions run in a separate process. Internal ones share the runtime. This module supports botu internal and external extensions.
 
 ## 🤝 Contributing
 
