@@ -32,7 +32,7 @@
       - [Init Event](#init-event)
       - [Invoke Event](#invoke-event)
       - [Shutdown Event](#shutdown-event)
-  - [Lambda Layer Setup](#-lambda-layer-setup)
+  - [Lambda Layer Setup](#lambda-layer-setup)
   - [Error Handling](#-error-handling)
     - [Error Handling Best Practices](#error-handling-best-practices)
   - [Performance Considerations](#-performance-considerations)
@@ -205,8 +205,9 @@ await hooks.start();
 
 ## Lambda Layer Setup
 
-To use this module as a Lambda Layer:
+This module supports deployment as a Lambda Layer, allowing you to inject custom logic at the INIT, INVOKE, and SHUTDOWN phases of your Lambda function lifecycle. You can use it in two ways:
 
+### 1. As an External Extension
 Create your extension bootstrap script:
 
 ```js
@@ -267,6 +268,74 @@ aws lambda update-function-configuration \
   --function-name your-function-name \
   --layers arn:aws:lambda:region:account-id:layer:my-extension-layer:1
 ```
+
+### 2. As an **Internal Extension**
+
+Internal extensions run **within the Lambda function's process**, but can still be delivered as a Lambda Layer and injected automatically using `NODE_OPTIONS` with the `--import` flag (Node.js 16+ / 18+ required).
+
+Create your preload extension file:
+
+```js
+// nodejs/lambda-extension-hooks/examples/internal-extension.js
+
+import { LambdaHooks } from '../index.js';
+
+const hooks = new LambdaHooks({
+  extensionName: 'my-internal-extension',
+  extensionType: 'internal'
+});
+
+hooks
+  .onInit(async () => console.log('[internal-extension] INIT'))
+  .onInvoke(async () => console.log('[internal-extension] INVOKE'))
+  .onShutdown(async () => console.log('[internal-extension] SHUTDOWN'));
+
+await hooks.start();
+```
+
+Set up your layer directory structure:
+```
+nodejs/
+├── lambda-extension-hooks/
+│ └── examples/
+│ └── internal-extension.js
+├── node_modules/
+└── package.json
+```
+
+> Ensure that `package.json` includes `"type": "module"` if you're using `.js` files with ES module syntax.
+
+Package your layer:
+
+```bash
+zip -r internal-extension-layer.zip nodejs
+```
+
+Publish the layer:
+
+```bash
+aws lambda publish-layer-version \
+  --layer-name "internal-extension-layer" \
+  --description "My Lambda Internal Extension" \
+  --zip-file "fileb://internal-extension-layer.zip" \
+  --compatible-runtimes nodejs18.x
+```
+
+**Attach the layer and set the environment variable:**
+
+```bash
+aws lambda update-function-configuration \
+  --function-name your-function-name \
+  --layers arn:aws:lambda:region:account-id:layer:internal-extension-layer:1 \
+  --environment "Variables={NODE_OPTIONS=--import=/opt/lambda-extension-hooks/examples/internal-extension.js}"
+```
+
+> Lambda automatically mounts your layer to the `/opt` directory.
+> By setting `NODE_OPTIONS=--import=/opt/lambda-extension-hooks/examples/internal-extension.js`, Node.js will preload your internal extension script at startup, before your function handler is invoked.
+
+This technique allows you to inject internal logic - such as logging, metrics, observability, or custom runtime behavior - **without modifying your Lambda function code**.
+It's especially useful for sharing instrumentation across multiple functions while keeping your deployments clean and decoupled.
+
 
 ## Error Handling
 
